@@ -1,0 +1,23 @@
+export const admin = {
+  title: "Administration",
+  overview: "System Overview",
+  manageUsers: "Manage Users",
+  manageDoctors: "Manage Doctors",
+  manageSpecialties: "Manage Specialties",
+  allAppointments: "All Appointments",
+  pendingApprovals: "Pending Approvals",
+  totalPatients: "Total Patients",
+  totalDoctors: "Total Doctors",
+  totalAppointments: "Total Appointments",
+  activeSpecialties: "Active Specialties",
+  addSpecialty: "Add Specialty",
+  editSpecialty: "Edit Specialty",
+  deleteSpecialty: "Delete Specialty",
+  confirmDeleteSpecialty: "Are you sure you want to delete this specialty?",
+  userRole: "Role",
+  status: "Status",
+  active: "Active",
+  inactive: "Inactive",
+  actions: "Actions",
+} as const;
+

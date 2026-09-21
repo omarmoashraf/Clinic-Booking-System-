@@ -1,0 +1,23 @@
+export const auth = {
+  loginTitle: "Sign in to your account",
+  loginSubtitle: "Enter your credentials to access your portal",
+  registerTitle: "Create a new account",
+  registerSubtitle: "Join our healthcare platform today",
+  email: "Email Address",
+  password: "Password",
+  confirmPassword: "Confirm Password",
+  fullName: "Full Name",
+  phone: "Phone Number",
+  role: "Account Type",
+  selectRole: "Select role",
+  rolePatient: "Patient",
+  roleDoctor: "Doctor",
+  roleAdmin: "Administrator",
+  forgotPassword: "Forgot password?",
+  alreadyHaveAccount: "Already have an account?",
+  dontHaveAccount: "Don't have an account?",
+  loginSuccess: "Signed in successfully",
+  registerSuccess: "Account created successfully",
+  logoutSuccess: "Logged out successfully",
+} as const;
+
