@@ -1,0 +1,19 @@
+import { apiClient } from "../../../lib/api";
+import type { ApiResponse } from "../../../types/api";
+import type { Appointment, CancelAppointmentPayload } from "../types";
+
+/**
+ * Cancel an appointment via PATCH /appointments/:id/status
+ * Available to PATIENT (for their own pending/confirmed appointments).
+ */
+export async function cancelAppointment(
+  appointmentId: string
+): Promise<ApiResponse<Appointment>> {
+  const payload: CancelAppointmentPayload = { status: "CANCELLED" };
+  return apiClient.patch<ApiResponse<Appointment>>(
+    `/appointments/${encodeURIComponent(appointmentId)}/status`,
+    {
+      body: payload,
+    }
+  );
+}

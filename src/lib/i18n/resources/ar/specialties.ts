@@ -18,5 +18,15 @@ export const specialties: SpecialtiesSchema = {
   generalPractice: "الطب العام",
   generalPracticeDesc: "الرعاية الصحية الأولية والطب الوقائي وطب الأسرة",
   viewDoctorsInSpecialty: "عرض الأطباء",
+  pageTitle: "التخصصات الطبية",
+  pageSubtitle: "تصفح مجموعتنا الكاملة من التخصصات الطبية واعثر على أفضل الأطباء المعتمدين.",
+  searchPlaceholder: "ابحث عن التخصصات بالاسم...",
+  clearSearch: "مسح البحث",
+  specialtiesCount: "عرض {count} من التخصصات",
+  totalSpecialties: "{total} تخصص متاح",
+  noSpecialtiesFound: "لم يتم العثور على تخصصات",
+  noSpecialtiesMatch: "لم نتمكن من العثور على أي تخصص يطابق \"{query}\". تحقق من صحة الكلمات أو امسح البحث.",
+  emptyCatalog: "لا توجد تخصصات متاحة حالياً في دليل العيادة.",
+  loadError: "تعذر تحميل قائمة التخصصات. يرجى المحاولة مرة أخرى.",
 };
 

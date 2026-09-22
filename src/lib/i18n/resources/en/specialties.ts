@@ -14,5 +14,15 @@ export const specialties = {
   generalPractice: "General Practice",
   generalPracticeDesc: "Primary healthcare, preventive medicine and family care",
   viewDoctorsInSpecialty: "View Doctors",
+  pageTitle: "Medical Specialties",
+  pageSubtitle: "Browse our full range of medical specialties and find verified healthcare professionals.",
+  searchPlaceholder: "Search specialties by name...",
+  clearSearch: "Clear Search",
+  specialtiesCount: "Showing {count} specialties",
+  totalSpecialties: "{total} specialties available",
+  noSpecialtiesFound: "No specialties found",
+  noSpecialtiesMatch: "We couldn't find any specialties matching \"{query}\". Try checking your spelling or clearing your search.",
+  emptyCatalog: "No specialties are currently available in the clinic directory.",
+  loadError: "Failed to load specialties. Please try again.",
 } as const;
 

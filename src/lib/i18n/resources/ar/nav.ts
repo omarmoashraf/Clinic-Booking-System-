@@ -17,5 +17,7 @@ export const nav: NavSchema = {
   logout: "تسجيل الخروج",
   settings: "الإعدادات",
   notifications: "الإشعارات",
+  findDoctors: "البحث عن طبيب",
+  backToWebsite: "العودة للموقع الرئيسي",
 };
 

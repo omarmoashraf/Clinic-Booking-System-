@@ -13,5 +13,7 @@ export const nav = {
   logout: "Log Out",
   settings: "Settings",
   notifications: "Notifications",
+  findDoctors: "Find Doctors",
+  backToWebsite: "Back to Website",
 } as const;
 
