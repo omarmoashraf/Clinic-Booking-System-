@@ -47,11 +47,14 @@ export interface PaginatedApiResponse<T> {
 
 /**
  * Standard API error response format
- * As defined in API_CONTRACT.md: { status: "error", message: "..." }
+ * As defined in API_CONTRACT.md and FRONTEND_INTEGRATION:
+ * { status: "error", message: "...", code?: "...", details?: [...] }
  */
 export interface ApiErrorResponse {
   status: "error";
   message: string;
+  code?: string;
+  details?: unknown[];
 }
 
 /**
@@ -60,16 +63,19 @@ export interface ApiErrorResponse {
 export interface ValidationErrorItem {
   field: string;
   message: string;
+  code?: string;
 }
 
 /**
  * Standard API validation error response format
- * As defined in API_CONTRACT.md: { status: "validation_error", message: "...", errors: [...] }
+ * Supports both { status: "validation_error", errors } and { status: "error", details }
  */
 export interface ApiValidationErrorResponse {
-  status: "validation_error";
+  status: "validation_error" | "error";
   message: string;
-  errors: ValidationErrorItem[];
+  code?: string;
+  errors?: ValidationErrorItem[];
+  details?: ValidationErrorItem[] | unknown[];
 }
 
 /**

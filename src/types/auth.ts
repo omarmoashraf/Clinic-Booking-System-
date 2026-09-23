@@ -116,6 +116,7 @@ export interface AuthContextValue {
   register: (payload: RegisterPayload) => Promise<RegisterResponseData>;
   logout: () => Promise<void>;
   refreshSession: () => Promise<boolean>;
+  updateProfile: (profile: UserProfile) => void;
 }
 
 

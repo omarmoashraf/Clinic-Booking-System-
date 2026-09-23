@@ -132,6 +132,11 @@ export function AuthProvider({
     }
   }, []);
 
+  const updateProfile = React.useCallback((newProfile: UserProfile) => {
+    setProfile(newProfile);
+    setUser({ id: newProfile.id, role: newProfile.role });
+  }, []);
+
   const value = React.useMemo<AuthContextValue>(() => {
     const role = user?.role;
     return {
@@ -147,8 +152,9 @@ export function AuthProvider({
       register,
       logout,
       refreshSession,
+      updateProfile,
     };
-  }, [status, user, profile, login, register, logout, refreshSession]);
+  }, [status, user, profile, login, register, logout, refreshSession, updateProfile]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

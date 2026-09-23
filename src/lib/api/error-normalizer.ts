@@ -14,6 +14,8 @@ export class NormalizedApiError extends Error implements NormalizedErrorDetails 
   readonly status: number | null;
   readonly i18nKey: string;
   readonly fieldErrors: FieldErrorsMap;
+  readonly code?: string;
+  readonly details?: unknown[];
   readonly raw?: unknown;
   readonly isNormalizedApiError = true;
 
@@ -24,10 +26,16 @@ export class NormalizedApiError extends Error implements NormalizedErrorDetails 
     this.status = details.status;
     this.i18nKey = details.i18nKey;
     this.fieldErrors = details.fieldErrors;
+    this.code = details.code;
+    this.details = details.details;
     this.raw = details.raw;
 
     // Restore prototype chain
     Object.setPrototypeOf(this, NormalizedApiError.prototype);
+  }
+
+  get isTokenExpired(): boolean {
+    return this.code === "token_expired";
   }
 
   get isValidation(): boolean {
@@ -109,6 +117,7 @@ export class NormalizedApiError extends Error implements NormalizedErrorDetails 
 /**
  * Extracts field-level validation errors from backend response structures.
  * Supports API_CONTRACT.md format: { status: "validation_error", errors: [{ field, message }] }
+ * and standardized backend format: { status: "error", details: [...] }
  */
 function extractFieldErrors(data: unknown): FieldErrorsMap {
   const result: FieldErrorsMap = {};
@@ -136,10 +145,40 @@ function extractFieldErrors(data: unknown): FieldErrorsMap {
         result[item.field].push(item.message);
       }
     }
-    return result;
   }
 
-  // Format 2: errors object with field -> string[] or field -> string
+  // Format 2: details array of { field, message } or { path, message } (standardized backend format)
+  if (Array.isArray(obj.details)) {
+    for (const item of obj.details) {
+      if (item && typeof item === "object") {
+        const itemObj = item as Record<string, unknown>;
+        const field =
+          typeof itemObj.field === "string"
+            ? itemObj.field
+            : typeof itemObj.path === "string"
+            ? itemObj.path
+            : Array.isArray(itemObj.path)
+            ? itemObj.path.join(".")
+            : undefined;
+
+        const message =
+          typeof itemObj.message === "string"
+            ? itemObj.message
+            : undefined;
+
+        if (field && message) {
+          if (!result[field]) {
+            result[field] = [];
+          }
+          if (!result[field].includes(message)) {
+            result[field].push(message);
+          }
+        }
+      }
+    }
+  }
+
+  // Format 3: errors object with field -> string[] or field -> string
   if (obj.errors && typeof obj.errors === "object" && !Array.isArray(obj.errors)) {
     const errorMap = obj.errors as Record<string, unknown>;
     for (const [field, value] of Object.entries(errorMap)) {
@@ -181,6 +220,33 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
     const data = error.data;
     const backendMessage = extractMessage(data, error.message);
 
+    let code: string | undefined = undefined;
+    let details: unknown[] | undefined = undefined;
+
+    if (typeof data === "object" && data !== null) {
+      const dataObj = data as Record<string, unknown>;
+      if (typeof dataObj.code === "string") {
+        code = dataObj.code;
+      }
+      if (Array.isArray(dataObj.details)) {
+        details = dataObj.details;
+      }
+    }
+
+    // Token expired error (can arrive as 401 or with code: "token_expired")
+    if (code?.toLowerCase() === "token_expired") {
+      return new NormalizedApiError({
+        kind: "UNAUTHORIZED",
+        status: status || 401,
+        message: backendMessage || "Token expired",
+        i18nKey: "errors.unauthorized",
+        fieldErrors: {},
+        code,
+        details,
+        raw: error,
+      });
+    }
+
     // 400 Bad Request / Validation Error
     if (status === 400) {
       const fieldErrors = extractFieldErrors(data);
@@ -189,7 +255,8 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
         (typeof data === "object" &&
           data !== null &&
           "status" in data &&
-          (data as { status: string }).status === "validation_error");
+          ((data as { status: string }).status === "validation_error" ||
+            (data as { status: string }).status === "error" && Array.isArray((data as { details?: unknown }).details)));
 
       if (isValidation) {
         return new NormalizedApiError({
@@ -198,6 +265,8 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
           message: backendMessage || "Request validation failed",
           i18nKey: "errors.validationFailed",
           fieldErrors,
+          code,
+          details,
           raw: error,
         });
       }
@@ -208,6 +277,8 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
         message: backendMessage || "Bad Request",
         i18nKey: "errors.generic",
         fieldErrors: {},
+        code,
+        details,
         raw: error,
       });
     }
@@ -220,6 +291,8 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
         message: backendMessage || "Unauthorized",
         i18nKey: "errors.unauthorized",
         fieldErrors: {},
+        code,
+        details,
         raw: error,
       });
     }
@@ -232,6 +305,8 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
         message: backendMessage || "Forbidden",
         i18nKey: "errors.forbidden",
         fieldErrors: {},
+        code,
+        details,
         raw: error,
       });
     }
@@ -244,6 +319,8 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
         message: backendMessage || "Not Found",
         i18nKey: "errors.notFound",
         fieldErrors: {},
+        code,
+        details,
         raw: error,
       });
     }
@@ -256,6 +333,8 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
         message: backendMessage || "Conflict",
         i18nKey: "errors.conflict",
         fieldErrors: {},
+        code,
+        details,
         raw: error,
       });
     }
@@ -269,6 +348,8 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
         message: backendMessage || "Validation failed",
         i18nKey: "errors.validationFailed",
         fieldErrors,
+        code,
+        details,
         raw: error,
       });
     }
@@ -281,6 +362,8 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
         message: backendMessage || "Too many requests. Please try again later.",
         i18nKey: "errors.rateLimit",
         fieldErrors: {},
+        code,
+        details,
         raw: error,
       });
     }
@@ -293,6 +376,8 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
         message: backendMessage || "Internal Server Error",
         i18nKey: "errors.serverError",
         fieldErrors: {},
+        code,
+        details,
         raw: error,
       });
     }
@@ -304,6 +389,8 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
       message: backendMessage || error.statusText || `Request failed with status ${status}`,
       i18nKey: "errors.generic",
       fieldErrors: {},
+      code,
+      details,
       raw: error,
     });
   }

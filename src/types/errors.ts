@@ -23,6 +23,8 @@ export interface NormalizedErrorDetails {
   message: string;
   i18nKey: string;
   fieldErrors: FieldErrorsMap;
+  code?: string;
+  details?: unknown[];
   raw?: unknown;
 }
 

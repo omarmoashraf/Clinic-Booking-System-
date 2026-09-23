@@ -11,6 +11,15 @@ export {
   appendQueryParams,
 } from "./http-client";
 
+export {
+  BaseApiService,
+  baseApiService,
+} from "./base-api-service";
+export type {
+  ApiContractPaths,
+  ApiContractSchemas,
+} from "./base-api-service";
+
 export { HttpError } from "./http-error";
 export type { HttpErrorParams } from "./http-error";
 

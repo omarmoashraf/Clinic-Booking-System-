@@ -191,29 +191,38 @@ export class HttpClient {
     }
 
     // Serialize body
+    let isFormData = false;
     let bodyInit: BodyInit | null | undefined = undefined;
     if (reqConfig.body !== undefined && reqConfig.body !== null) {
       const rawBody = reqConfig.body;
-      if (
+      if (rawBody instanceof FormData) {
+        isFormData = true;
+        bodyInit = rawBody;
+        // If body is FormData, delete Content-Type so browser sets boundary automatically
+        headers.delete(HTTP_HEADERS.CONTENT_TYPE);
+      } else if (
         typeof rawBody === "string" ||
-        rawBody instanceof FormData ||
         rawBody instanceof URLSearchParams ||
         rawBody instanceof Blob ||
         rawBody instanceof ArrayBuffer
       ) {
         bodyInit = rawBody as BodyInit;
-        // If body is FormData, delete Content-Type so browser sets boundary automatically
-        if (rawBody instanceof FormData) {
-          headers.delete(HTTP_HEADERS.CONTENT_TYPE);
-        }
       } else if (isPlainObject(rawBody) || Array.isArray(rawBody)) {
         bodyInit = JSON.stringify(rawBody);
-        if (!headers.has(HTTP_HEADERS.CONTENT_TYPE)) {
-          headers.set(HTTP_HEADERS.CONTENT_TYPE, CONTENT_TYPES.JSON);
-        }
       } else {
         bodyInit = String(rawBody);
       }
+    }
+
+    // Explicitly set Content-Type: application/json for all POST/PUT/PATCH requests (unless FormData)
+    if (
+      (reqConfig.method === "POST" ||
+        reqConfig.method === "PUT" ||
+        reqConfig.method === "PATCH") &&
+      !isFormData &&
+      !headers.has(HTTP_HEADERS.CONTENT_TYPE)
+    ) {
+      headers.set(HTTP_HEADERS.CONTENT_TYPE, CONTENT_TYPES.JSON);
     }
 
     // Setup cancellation and timeout
@@ -266,10 +275,21 @@ export class HttpClient {
 
       // Handle non-2xx responses
       if (!response.ok) {
-        // Attempt automatic refresh & retry on 401 Unauthorized
+        const errorData = await this.parseResponseBody(response);
+
+        // Check if error represents an expired token (status 401 OR code: "token_expired")
+        const isTokenExpiredCode =
+          isPlainObject(errorData) &&
+          typeof errorData.code === "string" &&
+          errorData.code.toLowerCase() === "token_expired";
+
+        const shouldAttemptRefresh =
+          response.status === 401 || isTokenExpiredCode;
+
+        // Attempt automatic refresh & retry
         const refreshTokenFn = this.refreshToken ?? defaultRefreshToken;
         if (
-          response.status === 401 &&
+          shouldAttemptRefresh &&
           refreshTokenFn &&
           !reqConfig.skipAuthRefresh &&
           !reqConfig._isRetry &&
@@ -287,7 +307,6 @@ export class HttpClient {
           }
         }
 
-        const errorData = await this.parseResponseBody(response);
         const errorMessage =
           this.extractErrorMessage(errorData) ||
           response.statusText ||

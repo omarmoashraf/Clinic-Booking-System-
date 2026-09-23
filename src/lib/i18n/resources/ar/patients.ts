@@ -50,5 +50,27 @@ export const patients: PatientsSchema = {
   appointmentDate: "التاريخ",
   appointmentTime: "الوقت",
   actionCancel: "إلغاء",
-};
 
+  // Profile Page Keys
+  fullName: "الاسم الكامل",
+  fullNamePlaceholder: "أدخل اسمك الكامل",
+  email: "البريد الإلكتروني",
+  phone: "رقم الهاتف",
+  phonePlaceholder: "مثال: +201000000000",
+  dateOfBirthPlaceholder: "YYYY-MM-DD",
+  accountDetails: "تفاصيل الحساب",
+  accountDetailsDesc: "بيانات الحساب وسجل التسجيل في النظام.",
+  joinedDate: "تاريخ الانضمام",
+  accountStatus: "حالة الحساب",
+  statusActive: "نشط",
+  statusInactive: "غير نشط",
+  readOnlyNotice: "البريد الإلكتروني وحالة الحساب تخضع لإدارة العيادة ولا يمكن تعديلها من هنا.",
+  saveChanges: "حفظ التغييرات",
+  saving: "جاري الحفظ...",
+  updateError: "تعذر تحديث الملف الشخصي. يرجى المحاولة مرة أخرى.",
+  profileSubtitle: "إدارة معلوماتك الشخصية، أرقام التواصل، وبياناتك الطبية.",
+  validationFullNameRequired: "الاسم الكامل مطلوب",
+  validationFullNameMax: "يجب ألا يتجاوز الاسم الكامل 150 حرفاً",
+  validationPhoneMax: "يجب ألا يتجاوز رقم الهاتف 30 حرفاً",
+  validationDateOfBirth: "يرجى إدخال تاريخ ميلاد صحيح (YYYY-MM-DD) وألا يكون في المستقبل",
+};

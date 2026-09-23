@@ -70,18 +70,43 @@ export class HttpError extends Error {
   }
 
   get isValidationError(): boolean {
-    return (
-      this.status === 422 ||
-      (this.status === 400 &&
-        typeof this.data === "object" &&
-        this.data !== null &&
-        "status" in this.data &&
-        (this.data as { status: string }).status === "validation_error")
-    );
+    if (this.status === 422) return true;
+    if (this.status === 400) {
+      if (typeof this.data === "object" && this.data !== null) {
+        const obj = this.data as Record<string, unknown>;
+        if (obj.status === "validation_error") return true;
+        if (Array.isArray(obj.errors) || Array.isArray(obj.details)) return true;
+      }
+    }
+    return false;
   }
 
   get isRateLimited(): boolean {
     return this.status === 429;
+  }
+
+  get code(): string | undefined {
+    if (typeof this.data === "object" && this.data !== null && "code" in this.data) {
+      const codeVal = (this.data as { code: unknown }).code;
+      if (typeof codeVal === "string") {
+        return codeVal;
+      }
+    }
+    return undefined;
+  }
+
+  get details(): unknown[] | undefined {
+    if (typeof this.data === "object" && this.data !== null && "details" in this.data) {
+      const detailsVal = (this.data as { details: unknown }).details;
+      if (Array.isArray(detailsVal)) {
+        return detailsVal;
+      }
+    }
+    return undefined;
+  }
+
+  get isTokenExpired(): boolean {
+    return this.code === "token_expired";
   }
 
   /**

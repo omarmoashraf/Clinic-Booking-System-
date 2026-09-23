@@ -35,7 +35,7 @@ import { cn } from "@/lib/utils";
 
 export function RegisterForm() {
   const { t } = useTranslation();
-  const { register: registerUser, login } = useAuth();
+  const { register: registerUser } = useAuth();
   const router = useRouter();
 
   const [selectedRole, setSelectedRole] = React.useState<"PATIENT" | "DOCTOR">("PATIENT");
@@ -81,22 +81,9 @@ export function RegisterForm() {
         specialtyId: values.role === "DOCTOR" ? values.specialtyId : undefined,
       });
 
-      // Seamless auto-login upon successful registration
-      try {
-        const profile = await login({
-          email: values.email.trim(),
-          password: values.password,
-        });
-
-        if (profile.role === "DOCTOR") {
-          router.push("/doctor/dashboard");
-        } else {
-          router.push("/patient/dashboard");
-        }
-      } catch {
-        // If auto-login fails, redirect to sign-in page with success banner
-        router.push("/login?registered=true");
-      }
+      // Per contract §4: registration does NOT return tokens.
+      // The user is NOT logged in after registration — redirect to login.
+      router.push("/login?registered=true");
     } catch (err) {
       if (HttpError.isHttpError(err)) {
         if (err.status === 409) {

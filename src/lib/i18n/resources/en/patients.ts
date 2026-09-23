@@ -46,5 +46,27 @@ export const patients = {
   appointmentDate: "Date",
   appointmentTime: "Time",
   actionCancel: "Cancel",
-} as const;
 
+  // Profile Page Keys
+  fullName: "Full Name",
+  fullNamePlaceholder: "Enter your full name",
+  email: "Email Address",
+  phone: "Phone Number",
+  phonePlaceholder: "e.g. +201000000000",
+  dateOfBirthPlaceholder: "YYYY-MM-DD",
+  accountDetails: "Account Details",
+  accountDetailsDesc: "System credentials and registration records.",
+  joinedDate: "Member Since",
+  accountStatus: "Account Status",
+  statusActive: "Active",
+  statusInactive: "Inactive",
+  readOnlyNotice: "Email and account status are managed by clinic administration and cannot be changed here.",
+  saveChanges: "Save Changes",
+  saving: "Saving...",
+  updateError: "Failed to update profile. Please try again.",
+  profileSubtitle: "Manage your personal information, contact numbers, and health records.",
+  validationFullNameRequired: "Full name is required",
+  validationFullNameMax: "Full name must not exceed 150 characters",
+  validationPhoneMax: "Phone number must not exceed 30 characters",
+  validationDateOfBirth: "Please provide a valid calendar date (YYYY-MM-DD) not in the future",
+} as const;

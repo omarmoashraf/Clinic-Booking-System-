@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test:i18n": "node --test src/lib/i18n/__tests__/i18n.test.mjs",
     "test:rtl": "node --test src/lib/i18n/__tests__/rtl.test.mjs",
-    "test:api": "node --test src/lib/api/__tests__/http-client.test.mjs",
+    "test:api": "node --test src/lib/api/__tests__/http-client.test.mjs src/lib/api/__tests__/base-api-service.test.mjs",
+    "test:base-api": "node --test src/lib/api/__tests__/base-api-service.test.mjs",
     "test:errors": "node --test src/lib/api/__tests__/error-normalizer.test.mjs",
     "test:auth": "node --test src/lib/auth/__tests__/auth-service.test.mjs",
     "test:query": "node --test src/lib/query/__tests__/query-client.test.mjs",
@@ -21,7 +22,9 @@
     "test:patient-dashboard": "node --test src/features/patients/__tests__/patient-dashboard.test.mjs",
     "test:patient-doctors": "node --test src/features/doctors/__tests__/patient-doctor-discovery.test.mjs",
     "test:booking": "node --test src/features/appointments/__tests__/create-appointment-api.test.mjs src/features/appointments/__tests__/booking-flow.test.mjs",
-    "test": "node --test src/lib/i18n/__tests__/i18n.test.mjs src/lib/i18n/__tests__/rtl.test.mjs src/lib/api/__tests__/http-client.test.mjs src/lib/api/__tests__/error-normalizer.test.mjs src/lib/auth/__tests__/auth-service.test.mjs src/lib/query/__tests__/query-client.test.mjs src/features/doctors/__tests__/doctors-api.test.mjs src/features/doctors/__tests__/doctor-detail-api.test.mjs src/features/doctors/__tests__/doctor-availability-api.test.mjs src/features/doctors/__tests__/patient-doctor-discovery.test.mjs src/features/specialties/__tests__/specialties-api.test.mjs src/features/specialties/__tests__/specialty-detail-api.test.mjs src/components/layout/__tests__/patient-layout.test.mjs src/features/appointments/__tests__/appointments-api.test.mjs src/features/appointments/__tests__/create-appointment-api.test.mjs src/features/appointments/__tests__/booking-flow.test.mjs src/features/patients/__tests__/patient-dashboard.test.mjs"
+    "test:patient-appointments": "node --test src/features/appointments/__tests__/appointment-detail-api.test.mjs src/features/appointments/__tests__/patient-appointments-list.test.mjs",
+    "test:patient-profile": "node --test src/features/patients/__tests__/patient-profile-api.test.mjs src/features/patients/__tests__/patient-profile-view.test.mjs",
+    "test": "node --test src/lib/i18n/__tests__/i18n.test.mjs src/lib/i18n/__tests__/rtl.test.mjs src/lib/api/__tests__/http-client.test.mjs src/lib/api/__tests__/base-api-service.test.mjs src/lib/api/__tests__/error-normalizer.test.mjs src/lib/auth/__tests__/auth-service.test.mjs src/lib/query/__tests__/query-client.test.mjs src/features/doctors/__tests__/doctors-api.test.mjs src/features/doctors/__tests__/doctor-detail-api.test.mjs src/features/doctors/__tests__/doctor-availability-api.test.mjs src/features/doctors/__tests__/patient-doctor-discovery.test.mjs src/features/specialties/__tests__/specialties-api.test.mjs src/features/specialties/__tests__/specialty-detail-api.test.mjs src/components/layout/__tests__/patient-layout.test.mjs src/features/appointments/__tests__/appointments-api.test.mjs src/features/appointments/__tests__/create-appointment-api.test.mjs src/features/appointments/__tests__/booking-flow.test.mjs src/features/appointments/__tests__/appointment-detail-api.test.mjs src/features/appointments/__tests__/patient-appointments-list.test.mjs src/features/patients/__tests__/patient-dashboard.test.mjs src/features/patients/__tests__/patient-profile-api.test.mjs src/features/patients/__tests__/patient-profile-view.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
