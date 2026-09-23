@@ -89,10 +89,10 @@ export class BaseApiService {
       credentials: LoginCredentials,
       config?: RequestConfig
     ): Promise<ApiResponse<LoginResponseData>> => {
-      return this.client.post<ApiResponse<LoginResponseData>>(
+      return this.client.request<ApiResponse<LoginResponseData>>(
+        "POST",
         "/auth/login",
-        credentials,
-        config
+        { ...config, body: credentials }
       );
     },
 

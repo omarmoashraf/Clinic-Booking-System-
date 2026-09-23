@@ -259,6 +259,7 @@ export class HttpClient {
           );
     }
 
+    console.log("SENDING REQUEST:", reqConfig.method, urlWithParams);
     try {
       let response = await this.fetchFn(urlWithParams, {
         method: reqConfig.method,

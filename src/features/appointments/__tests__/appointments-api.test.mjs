@@ -98,11 +98,11 @@ test("Appointments API — cancelAppointment", async (t) => {
 
   await t.test("calls PATCH /appointments/:id/status with { status: 'CANCELLED' }", async () => {
     let capturedUrl = "";
-    let capturedConfig = null;
+    let capturedBody = null;
 
-    apiClient.patch = async (url, config) => {
+    apiClient.patch = async (url, body, config) => {
       capturedUrl = url;
-      capturedConfig = config;
+      capturedBody = body;
       return {
         status: "success",
         data: {
@@ -115,7 +115,7 @@ test("Appointments API — cancelAppointment", async (t) => {
     const res = await cancelAppointment("apt-123");
 
     assert.strictEqual(capturedUrl, "/appointments/apt-123/status");
-    assert.deepStrictEqual(capturedConfig?.body, { status: "CANCELLED" });
+    assert.deepStrictEqual(capturedBody, { status: "CANCELLED" });
     assert.strictEqual(res.status, "success");
     assert.strictEqual(res.data.status, "CANCELLED");
   });

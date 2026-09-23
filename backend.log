@@ -1,0 +1,14 @@
+❌ Configuration validation failed:
+{
+  "_errors": [],
+  "DATABASE_URL": {
+    "_errors": [
+      "Invalid input: expected string, received undefined"
+    ]
+  },
+  "JWT_SECRET": {
+    "_errors": [
+      "Invalid input: expected string, received undefined"
+    ]
+  }
+}

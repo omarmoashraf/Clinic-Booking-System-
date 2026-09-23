@@ -39,9 +39,10 @@ export class AuthService {
   async login(
     credentials: LoginCredentials
   ): Promise<{ tokens: AuthTokens; user: AuthUser; profile: UserProfile }> {
-    const response = await this.client.post<ApiResponse<LoginResponseData>>(
+    const response = await this.client.request<ApiResponse<LoginResponseData>>(
+      "POST",
       "/auth/login",
-      credentials
+      { body: credentials }
     );
 
     const { accessToken, refreshToken, user } = response.data;

@@ -252,7 +252,7 @@ export function RegisterForm() {
             name="specialtyId"
             render={({ field }) => (
               <Select
-                value={field.value || undefined}
+                value={field.value || ""}
                 onValueChange={(val) => field.onChange(String(val ?? ""))}
               >
                 <SelectTrigger id="specialtyId" className="w-full h-10 text-sm">
