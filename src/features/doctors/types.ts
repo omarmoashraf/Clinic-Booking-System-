@@ -21,3 +21,8 @@ export interface GetDoctorsParams {
   specialty?: string;
 }
 
+export interface UpdateDoctorProfilePayload {
+  bio?: string;
+  specialtyId?: string;
+}
+

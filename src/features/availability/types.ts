@@ -15,3 +15,11 @@ export interface GetAvailabilityParams {
   to?: string; // YYYY-MM-DD
 }
 
+export interface CreateAvailabilityPayload {
+  date: string; // YYYY-MM-DD
+  startTime: string; // HH:mm (24-hour time)
+  endTime: string; // HH:mm (24-hour time, strictly after startTime)
+}
+
+export type AvailabilityFilterRange = "all" | "today" | "week" | "month" | "custom";
+

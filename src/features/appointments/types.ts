@@ -53,6 +53,10 @@ export interface CancelAppointmentPayload {
   status: "CANCELLED";
 }
 
+export interface UpdateAppointmentStatusPayload {
+  status: "CONFIRMED" | "CANCELLED" | "COMPLETED";
+}
+
 export interface CreateAppointmentPayload {
   availabilityId: string;
   notes?: string | null;
